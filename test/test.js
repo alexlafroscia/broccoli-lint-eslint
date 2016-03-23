@@ -5,6 +5,7 @@ const FIXTURES = 'test/fixture';
 const CAMELCASE = '(camelcase)';
 const CONSOLE = '(no-console)';
 const CUSTOM_RULES = 'testing custom rules';
+const SINGLEQUOTE = 'Strings must use singlequote.';
 const DOUBLEQUOTE = 'Strings must use doublequote.';
 const FILEPATH = 'fixture/1.js';
 
@@ -18,6 +19,7 @@ describe('EslintValidationFilter', function describeEslintValidationFilter() {
       expect(buildLog, 'Shows filepath').to.have.string(FILEPATH);
       expect(buildLog, 'Used relative config - console not allowed').to.have.string(CONSOLE);
       expect(buildLog, 'Used relative config - single quotes').to.not.have.string(DOUBLEQUOTE);
+      expect(buildLog, 'Detected and used nested config -- nested rule for double quotes').to.not.have.string(SINGLEQUOTE);
       expect(buildLog, 'No custom rules defined').to.not.have.string(CUSTOM_RULES);
     });
   });
@@ -48,6 +50,16 @@ describe('EslintValidationFilter', function describeEslintValidationFilter() {
       expect(buildLog, 'Used alternate config - double quotes').to.have.string(DOUBLEQUOTE);
     });
   });
+
+  it('should detect and use nested .eslintrc files', function shouldAcceptNestedConfigFile() {
+
+    const promise = runEslint(FIXTURES);
+
+    return promise.then(function assertLinting({buildLog}) {
+      expect(buildLog, 'Used nested config that overrides double quotes in favor of single quotes').to.not.have.string(SINGLEQUOTE);
+    });
+  });
+
 
   it('should create test files', function shouldGenerateTests() {
     const promise = runEslint(FIXTURES, {
