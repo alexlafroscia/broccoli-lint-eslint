@@ -40,6 +40,7 @@
   },
   "homepage": "https://github.com/jonathanKingston/broccoli-lint-eslint",
   "dependencies": {
+    "babel-eslint": "^6.0.4",
     "broccoli-persistent-filter": "^1.2.0",
     "escape-string-regexp": "^1.0.5",
     "eslint": "^2.4.0",
